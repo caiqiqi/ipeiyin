@@ -40,7 +40,7 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/13-2.png)
 长按的就不看了吧，看OnItemClickListener这个的onItemClick()吧，找到关键代码
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/14.png)
-发现一个新的HotRankInfoActivity。看着名字不像是这个界面感觉啊
+发现一个新的HotRankInfoActivity。看名字不像是这个界面的感觉啊
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/15.png)
 就因为这个名字，没有想通，在别的地方又找了好久（所以还是没经验啊）。
 最后还是根据在这个界面中点击“评论”和“分享”按钮时，系统弹出的Toast“当前为本地视频，请上传后重试”这个线索，发现还只能是这里了。
@@ -58,7 +58,9 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
 在ShareActivity中，又是通过对onClick()的查看发现了各个case
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/20.png)
 发现对分享到“微信好友”和“微信朋友圈”有一条两者都需要走的路。
+
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/21.png)
+
 都是先检测“微信”的版本，确认该版本可以分享之后，再通过对weChatShare()传递不同的参数，以区分“发送给微信好友”还是“分享到朋友圈”这两种情况。
 在weChatShare()中，通过调用腾讯的微信SDK中的API，将这个“配音”的各种信息（视频的url，封面图片，描述语等）交给微信的Activity来完成。
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/22.png)
