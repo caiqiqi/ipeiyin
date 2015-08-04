@@ -13,6 +13,7 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
  然后audio,group,rank,me…几个单词就出现在我脑海里，在猜想他会怎么命名呢？
 好，首先当然是打开配置文件（AndroidManifest.xml）咯。搜索“android.intent.action.MAIN”“android.intent.category.LAUNCHER”的“活动”（Activity）。好找到了，“com.ishowedu.peiyin.login.SplashActivity”嗯，这里不是一个主界面，应该是一个欢迎界面。好像一般都这个路数哈，先是一张欢迎的图，然后如果没有账号在本地登录过，即本地没有你的SharedPreference的话，就进入登录界面；如果你已经登录过了，那么直接进入主界面。
 打开这个Activity，注意到这个Activity没有直接继承Activity类，而是
+
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/4.png) 
 好了，先不去研究BaseActivity2是个什么玩意，先搜索onCreate()吧，结果居然没有，啊，我还是太年轻，原来您不重写这个啊？行，那就搜startActivity()吧，您总得跳转的吧。搜到一个叫onLoadFinished()的一个方法，可能是BaseActivity2的吧，啊，不管了，好，找到线索了。 
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/5.png) 
@@ -26,7 +27,8 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
 我要找到我的地盘，然后打开我先前配的音当然要到MeSpaceFragment里面去看啊。
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/8.png) 
 看到这个页面有很多选项，可能是Button或者什么View之类的。看看全局变量吧，找到很多TextView
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/9.png) 
+![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/9.png)
+
 想到这个界面里的各种词“粉丝”“访客”“相册”什么的，然后什么fans,visitor,album,friend之类的东西就出来了，看看变量名，恩，应该就是你们这几个家伙了。然后我发现到现在为止我已经看到好多次dubbing这个词了，这词啥意思啊，没见过。查了查，哦，原来是“配音”的意思。那“我的配音”这个按钮应该对应tvMydub这个了。那就该去找点击之后会发生什么啊，于是找onClick()。在onClick()中有很多case，对应着这个界面中的各个View控件，再找startActivity()。好像没有什么信息需要返回的，应该不是startActivityForResults()。在众多的startActivity()中找吧。 
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/10.png) 
 看到一个DubbingListActivity，这个应该是表示“配音列表”吧。但是startActivity()中的参数怎么不是直接指定的Intent呢？猜想createIntent()应该是返回一个Intent，去里面瞄了瞄，恩，是的，好，这我就放心了，然后就进入了DubbingListActivity，这时候我们就来到这里了
