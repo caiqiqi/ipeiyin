@@ -14,7 +14,8 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
 好，首先当然是打开配置文件（AndroidManifest.xml）咯。搜索“android.intent.action.MAIN”“android.intent.category.LAUNCHER”的“活动”（Activity）。好找到了，“com.ishowedu.peiyin.login.SplashActivity”嗯，这里不是一个主界面，应该是一个欢迎界面。好像一般都这个路数哈，先是一张欢迎的图，然后如果没有账号在本地登录过，即本地没有你的SharedPreference的话，就进入登录界面；如果你已经登录过了，那么直接进入主界面。
 打开这个Activity，注意到这个Activity没有直接继承Activity类，而是
 
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/4.png) 
+![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/4.png)
+
 好了，先不去研究BaseActivity2是个什么玩意，先搜索onCreate()吧，结果居然没有，啊，我还是太年轻，原来您不重写这个啊？行，那就搜startActivity()吧，您总得跳转的吧。搜到一个叫onLoadFinished()的一个方法，可能是BaseActivity2的吧，啊，不管了，好，找到线索了。 
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/5.png) 
 看到经过判断后，它会跳转到MainActivity。然后再搜MainActivity的onCreate()方法，这次总算有了吧
