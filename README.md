@@ -27,9 +27,8 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
 将GroupHomeWrapperFragment与“小组”选项卡配对，RankFragment2与“榜单”配对，MeSpaceFragment与“我”选项卡配对之后，就只剩下HomeFragment了，好吧，那只能是你了。所以我目前所在的“配音”选项卡应该是HomeFragment。
 我要找到我的地盘，然后打开我先前配的音当然要到MeSpaceFragment里面去看啊。</br>
 <img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/8.png width="40%" height="40%" /> </br>
-看到这个页面有很多选项，可能是Button或者什么View之类的。看看全局变量吧，找到很多TextView
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/9.png)
-
+看到这个页面有很多选项，可能是Button或者什么View之类的。看看全局变量吧，找到很多TextView </br>
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/9.png width="70%" height="70%" /> </br>
 想到这个界面里的各种词“粉丝”“访客”“相册”什么的，然后什么fans,visitor,album,friend之类的东西就出来了，看看变量名，恩，应该就是你们这几个家伙了。然后我发现到现在为止我已经看到好多次dubbing这个词了，这词啥意思啊，没见过。查了查，哦，原来是“配音”的意思。那“我的配音”这个按钮应该对应tvMydub这个了。那就该去找点击之后会发生什么啊，于是找onClick()。在onClick()中有很多case，对应着这个界面中的各个View控件，再找startActivity()。好像没有什么信息需要返回的，应该不是startActivityForResults()。在众多的startActivity()中找吧。 
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/10.png) 
 看到一个DubbingListActivity，这个应该是表示“配音列表”吧。但是startActivity()中的参数怎么不是直接指定的Intent呢？猜想createIntent()应该是返回一个Intent，去里面瞄了瞄，恩，是的，好，这我就放心了，然后就进入了DubbingListActivity，这时候我们就来到这里了</br>
