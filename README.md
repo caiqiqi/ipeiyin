@@ -1,21 +1,21 @@
 # ipeiyin
 
   前天看到空间里有人在玩给视频里的人说的话配音。有两种，一种其实就是卡拉OK的形式，把话筒交给你；另一种是给电影里的人物配音，就是说台词。想想近期有给你一段音频要你自己表演对口型的，还有给你视频要你自己配音的。
-  我也玩了一下，录完之后分享到微信朋友圈，结果我点击分享按钮之后，这软件提示我“发送取消”。我心想我明明点的“发送”啊，怎么就成“取消”了。好行，取消就取消吧，我就再发送一次，结果还是“发送取消”，反正前后总共云雨了三次之后，我放弃了，然后就去吃饭了。结果回来一看，咦，怎么朋友圈里这么多条响应？
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/1.png) 
+  我也玩了一下，录完之后分享到微信朋友圈，结果我点击分享按钮之后，这软件提示我“发送取消”。我心想我明明点的“发送”啊，怎么就成“取消”了。好行，取消就取消吧，我就再发送一次，结果还是“发送取消”，反正前后总共云雨了三次之后，我放弃了，然后就去吃饭了。结果回来一看，咦，怎么朋友圈里这么多条响应？</br>
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/1.png width="50%" height="50%" /> </br>
 然后我把自己的朋友圈的“相册”打开发现已经发布了三条，由于后来又被我删除了，这里只剩下两条。
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/2.png) 
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/2.png width="50%" height="50%" /> </br>
 我寻思原来您玩延迟呢！
   然后我就想看看里面代码到底怎么写的。话说上次玩“唱吧”也是的，第一次玩就发现一个bug，就是当你打开一个你之前已经打开过的曲目时，而且是同一个版本的话，即，该版本的缓存已经在你本地了，比如我打开上次唱过的“Lose yourself”，因为这首歌有几个版本，去确认了是刚才打开的那个版本之后，当我再点击那个曲目时，就进不去了，而打开其他任何我没打开过的曲目都挺好的。。。后来我反馈给了“唱吧”新版本解决没有。
 PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，是我机型问题？）
   好，闲话不多扯，看看里面代码到底怎么搞的。首先当然是先在手机里观察，这里应用的底部有四个标签页（TabHost）：“配音”“小组”“榜单”“我”。
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/3.png) 
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/3.png width="50%" height="50%" /> </br>
  然后audio,group,rank,me…几个单词就出现在我脑海里，在猜想他会怎么命名呢？
-好，首先当然是打开配置文件（AndroidManifest.xml）咯。搜索“android.intent.action.MAIN”“android.intent.category.LAUNCHER”的“活动”（Activity）。好找到了，“com.ishowedu.peiyin.login.SplashActivity”嗯，这里不是一个主界面，应该是一个欢迎界面。好像一般都这个路数哈，先是一张欢迎的图，然后如果没有账号在本地登录过，即本地没有你的SharedPreference的话，就进入登录界面；如果你已经登录过了，那么直接进入主界面。
-打开这个Activity，注意到这个Activity没有直接继承Activity类，而是
+好，首先当然是打开配置文件（`AndroidManifest.xml`）咯。搜索**android.intent.action.MAIN** **android.intent.category.LAUNCHER**的“活动”（Activity）。好找到了，**com.ishowedu.peiyin.login.SplashActivity** </br>
+嗯，这里不是一个主界面，应该是一个欢迎界面。好像一般都这个路数哈，先是一张欢迎的图，然后如果没有账号在本地登录过，即本地没有你的SharedPreference的话，就进入登录界面；如果你已经登录过了，那么直接进入主界面。</br>
+打开这个Activity，注意到这个Activity没有直接继承Activity类，而是</br>
 
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/4.png)
-
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/4.png width="50%" height="50%" /> </br>
 好了，先不去研究BaseActivity2是个什么玩意，先搜索onCreate()吧，结果居然没有，啊，我还是太年轻，原来您不重写这个啊？行，那就搜startActivity()吧，您总得跳转的吧。搜到一个叫onLoadFinished()的一个方法，可能是BaseActivity2的吧，啊，不管了，好，找到线索了。 
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/5.png) 
 看到经过判断后，它会跳转到MainActivity。然后再搜MainActivity的onCreate()方法，这次总算有了吧
