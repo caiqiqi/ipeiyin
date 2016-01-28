@@ -39,24 +39,24 @@ PS：这么简单的一个bug也没发现。。。（难道因为众ROM难调，
  经过验证发现，应该上面是ActionBar，下面是Fragment。
 然后就找onClick()，找了半天发现没找对地方，后面想了想，这活应该交给它的Fragment，于是在initFragment()中找到了对应的DubbingListFragment。
 又是一番好找（第一次玩，没经验啊），在DubbingListFragment中找到了两个响应点击事件的监听器（在那个有视频截图的图片上长按，发现有响应的对话框出现，对应的，猜想应该有一个对长按响应的监听器）。
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/13-1.png) 
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/13-2.png)
-长按的就不看了吧，看OnItemClickListener这个的onItemClick()吧，找到关键代码
+![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/13-1.png) </br>
+![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/13-2.png) </br>
+长按的就不看了吧，看OnItemClickListener这个的onItemClick()吧，找到关键代码<br>
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/14.png)
-发现一个新的HotRankInfoActivity。看名字不像是这个界面的感觉啊
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/15.png)
+发现一个新的HotRankInfoActivity。看名字不像是这个界面的感觉啊</br>
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/15.png width="40%" height="40%" /> </br>
 就因为这个名字，没有想通，在别的地方又找了好久（所以还是没经验啊）。
 最后还是根据在这个界面中点击“评论”和“分享”按钮时，系统弹出的Toast“当前为本地视频，请上传后重试”这个线索，发现还只能是这里了。当然，同时我也因此找到了与“评论”和“分享”按钮相关的代码区域。</br>
 好了，再来，再找它的onCreate()</br>
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/16.png)
-再看initFragment()这个方法
+再看initFragment()这个方法</br>
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/17.png)
 （先前对Fragment不怎么熟，临时抱佛脚，查了下官方文档才知道怎么用的。）于是，我们又要跳到HotRankInfoFragment里去瞧一瞧了。
 照例，还是在onClick()中找，发现switch里有几个case，应该是对应的“评论”“我要配音”“分享”这几个按钮。
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/18.png)
 看到698行，“分享”按钮下面，又是对操作者是否是本地用户进行了判断。
-最后关键的是707行（开始以为709行会干什么重要的事咯，后来发现原来只是给新打开的Activity加一些特效），将各种乱七八糟的参数传给Intent后，进入到ShareActivity，也就是这个界面：
-![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/19.png)
+最后关键的是707行（开始以为709行会干什么重要的事咯，后来发现原来只是给新打开的Activity加一些特效），将各种乱七八糟的参数传给Intent后，进入到ShareActivity，也就是这个界面：</br>
+<img src = http://raw.github.com/caiqiqi/ipeiyin/master/img/19.png width="40%" height="40%" /> </br>
 在ShareActivity中，又是通过对onClick()的查看发现了各个case
 ![Image text](http://raw.github.com/caiqiqi/ipeiyin/master/img/20.png)
 发现对分享到“微信好友”和“微信朋友圈”有一条两者都需要走的路。
